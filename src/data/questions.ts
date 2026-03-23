@@ -14,13 +14,13 @@ export interface Question {
 export const questions: Question[] = [
   {
     id: 1,
-    text: "When a competitor raises a large funding round, your first thought is:",
+    text: "On a Sunday evening before a big week:",
     answers: [
-      { text: "We're falling behind. This might kill our chances.", archetype: "signal-amplifier" },
-      { text: "Why are they ahead? What am I doing wrong?", archetype: "comparison-navigator" },
-      { text: "My team is counting on me to respond to this.", archetype: "responsibility-carrier" },
-      { text: "I need to re-analyze our entire strategy.", archetype: "strategic-overthinker" },
-      { text: "Time to double down and outwork them.", archetype: "relentless-builder" },
+      { text: "I can't stop thinking about everything that could go wrong.", archetype: "signal-amplifier" },
+      { text: "I checked Twitter and everyone seems to be doing better.", archetype: "comparison-navigator" },
+      { text: "My team needs me to have answers by Monday.", archetype: "responsibility-carrier" },
+      { text: "I'm mentally running through every possible scenario.", archetype: "strategic-overthinker" },
+      { text: "I'm already working. Rest can wait.", archetype: "relentless-builder" },
     ],
   },
   {
@@ -47,24 +47,24 @@ export const questions: Question[] = [
   },
   {
     id: 4,
-    text: "On a Sunday evening before a big week:",
+    text: "When a competitor raises a large funding round:",
     answers: [
-      { text: "I can't stop thinking about everything that could go wrong.", archetype: "signal-amplifier" },
-      { text: "I checked Twitter and everyone seems to be doing better.", archetype: "comparison-navigator" },
-      { text: "My team needs me to have answers by Monday.", archetype: "responsibility-carrier" },
-      { text: "I'm mentally running through every possible scenario.", archetype: "strategic-overthinker" },
-      { text: "I'm already working. Rest can wait.", archetype: "relentless-builder" },
+      { text: "We're falling behind. This might kill our chances.", archetype: "signal-amplifier" },
+      { text: "Why are they ahead? What am I doing wrong?", archetype: "comparison-navigator" },
+      { text: "My team is counting on me to respond to this.", archetype: "responsibility-carrier" },
+      { text: "I need to re-analyze our entire strategy.", archetype: "strategic-overthinker" },
+      { text: "Time to double down and outwork them.", archetype: "relentless-builder" },
     ],
   },
   {
     id: 5,
-    text: "When you read about a startup shutting down:",
+    text: "When you finally hit a major milestone:",
     answers: [
-      { text: "That could easily be us.", archetype: "signal-amplifier" },
-      { text: "At least they got further than we have.", archetype: "comparison-navigator" },
-      { text: "I can't imagine putting my employees through that.", archetype: "responsibility-carrier" },
-      { text: "I wonder what decisions led to that outcome.", archetype: "strategic-overthinker" },
-      { text: "That's what happens when you stop hustling.", archetype: "relentless-builder" },
+      { text: "I'm already worried about what could go wrong next.", archetype: "signal-amplifier" },
+      { text: "Others have hit bigger milestones faster.", archetype: "comparison-navigator" },
+      { text: "I hope my team feels recognized for their work.", archetype: "responsibility-carrier" },
+      { text: "I need to understand exactly why this worked.", archetype: "strategic-overthinker" },
+      { text: "Great. What's the next goal?", archetype: "relentless-builder" },
     ],
   },
 ];
