@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { archetypes, ArchetypeId } from "@/data/archetypes";
 
 interface EmailCaptureProps {
   archetype: string;
@@ -11,6 +12,10 @@ interface EmailCaptureProps {
 export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Get archetype name for teaser
+  const archetypeData = archetypes[archetype as ArchetypeId];
+  const archetypeName = archetypeData?.name || "Your Archetype";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +43,12 @@ export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps)
         <span className="inline-block w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
       </div>
 
-      <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4 text-[var(--text-primary)]">
-        Your result is ready.
+      <h2 className="font-serif text-3xl md:text-4xl font-normal mb-2 text-[var(--text-primary)]">
+        You&apos;re {archetypeName.startsWith("The ") ? "" : "a "}
+        <span className="text-[var(--accent)]">{archetypeName}</span>
       </h2>
       <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
-        Enter your email to see your Founder Archetype and get early access to FounderTherapy when we launch.
+        Enter your email to see what this means and get early access to FounderTherapy when we launch.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -68,7 +74,7 @@ export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps)
               Processing
             </span>
           ) : (
-            "See My Result"
+            "See What This Means"
           )}
         </button>
       </form>
