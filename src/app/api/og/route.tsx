@@ -10,7 +10,8 @@ export async function GET(request: Request) {
   const archetype = archetypeId ? archetypes[archetypeId] : null;
 
   const name = archetype?.name ?? "Which Founder Archetype Are You?";
-  const tagline = archetype?.tagline ?? "Discover your thinking pattern in 60 seconds";
+  const rawTagline = archetype?.tagline ?? "Discover your thinking pattern in 60 seconds";
+  const tagline = rawTagline.replace(/—/g, "-");
 
   return new ImageResponse(
     (
