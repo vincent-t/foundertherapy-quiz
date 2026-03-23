@@ -10,7 +10,8 @@ export function QuizResult({ archetype }: QuizResultProps) {
   const shareText = encodeURIComponent(
     `I'm a ${archetype.name} founder. Which founder archetype are you?`
   );
-  const shareUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const shareUrl = `${origin}/result/${archetype.id}`;
   const twitterUrl = `https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(shareUrl)}`;
 
   return (
