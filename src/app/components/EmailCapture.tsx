@@ -38,11 +38,15 @@ export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps)
 
   return (
     <div className="animate-fadeIn">
-      <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4">
+      <div className="mb-2">
+        <span className="inline-block w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
+      </div>
+
+      <h2 className="font-serif text-3xl md:text-4xl font-normal mb-4 text-[var(--text-primary)]">
         Your result is ready.
       </h2>
-      <p className="text-lg text-neutral-400 mb-8">
-        Enter your email to see your Founder Archetype — plus get early access to FounderTherapy when we launch.
+      <p className="text-lg text-[var(--text-secondary)] mb-8 leading-relaxed">
+        Enter your email to see your Founder Archetype and get early access to FounderTherapy when we launch.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -52,27 +56,40 @@ export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps)
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           required
-          className="w-full bg-neutral-900 border border-neutral-700 focus:border-accent rounded-lg px-5 py-4 text-white placeholder-neutral-500 outline-none transition-colors"
+          className="input-styled w-full"
         />
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-accent hover:bg-accent/90 disabled:opacity-50 text-white font-medium px-8 py-4 rounded-lg text-lg transition-colors"
+          className="btn-primary w-full disabled:opacity-50"
         >
-          {isSubmitting ? "..." : "See My Result"}
+          {isSubmitting ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              Processing
+            </span>
+          ) : (
+            "See My Result"
+          )}
         </button>
       </form>
 
-      <p className="text-sm text-neutral-500 mt-4">
+      <p className="text-xs text-[var(--text-muted)] mt-4 uppercase tracking-wider">
         No spam. Unsubscribe anytime.
       </p>
 
       {!process.env.NEXT_PUBLIC_WEBHOOK_URL && (
         <button
           onClick={onSkip}
-          className="mt-6 text-neutral-500 hover:text-neutral-300 text-sm transition-colors"
+          className="mt-8 text-[var(--text-muted)] hover:text-[var(--text-secondary)] text-sm transition-colors flex items-center gap-2"
         >
-          Skip for now →
+          Skip for now
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+          </svg>
         </button>
       )}
     </div>

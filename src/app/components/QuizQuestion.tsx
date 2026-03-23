@@ -24,18 +24,20 @@ export function QuizQuestion({
     <div className="animate-fadeIn">
       <ProgressBar current={currentIndex + 1} total={totalQuestions} />
 
-      <h2 className="font-serif text-2xl md:text-3xl font-normal mb-8 leading-relaxed">
+      <h2 className="font-serif text-2xl md:text-3xl font-normal mb-10 leading-relaxed text-[var(--text-primary)]">
         {question.text}
       </h2>
 
-      <div className="space-y-3">
+      <div className="stagger-children space-y-3">
         {question.answers.map((answer, index) => (
           <button
             key={index}
             onClick={() => onAnswer(index)}
-            className="w-full text-left bg-neutral-900 border border-neutral-800 hover:border-accent hover:bg-neutral-800 rounded-lg px-5 py-4 transition-colors"
+            className="card-interactive w-full text-left px-5 py-4 group"
           >
-            <span className="text-neutral-300">{answer.text}</span>
+            <span className="relative z-10 text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
+              {answer.text}
+            </span>
           </button>
         ))}
       </div>
@@ -43,9 +45,12 @@ export function QuizQuestion({
       {canGoBack && (
         <button
           onClick={onBack}
-          className="mt-8 text-neutral-500 hover:text-neutral-300 text-sm transition-colors"
+          className="mt-10 text-[var(--text-muted)] hover:text-[var(--text-secondary)] text-sm transition-colors flex items-center gap-2"
         >
-          ← Back
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
         </button>
       )}
     </div>
