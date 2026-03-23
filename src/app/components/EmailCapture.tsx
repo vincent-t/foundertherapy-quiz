@@ -18,18 +18,14 @@ export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps)
 
     setIsSubmitting(true);
 
-    const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_URL;
-
-    if (webhookUrl) {
-      try {
-        await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, archetype }),
-        });
-      } catch (error) {
-        console.error("Webhook error:", error);
-      }
+    try {
+      await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, archetype }),
+      });
+    } catch (error) {
+      console.error("Subscribe error:", error);
     }
 
     setIsSubmitting(false);
@@ -81,17 +77,15 @@ export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps)
         No spam. Unsubscribe anytime.
       </p>
 
-      {!process.env.NEXT_PUBLIC_WEBHOOK_URL && (
-        <button
-          onClick={onSkip}
-          className="mt-8 text-[var(--text-muted)] hover:text-[var(--text-secondary)] text-sm transition-colors flex items-center gap-2"
-        >
-          Skip for now
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      )}
+      <button
+        onClick={onSkip}
+        className="mt-8 text-[var(--text-muted)] hover:text-[var(--text-secondary)] text-sm transition-colors flex items-center gap-2"
+      >
+        Skip for now
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
     </div>
   );
 }
