@@ -47,6 +47,17 @@ export const questions: Question[] = [
   },
   {
     id: 4,
+    text: "When you read about a startup shutting down:",
+    answers: [
+      { text: "That could easily be us.", archetype: "signal-amplifier" },
+      { text: "At least they got further than we have.", archetype: "comparison-navigator" },
+      { text: "I can't imagine putting my employees through that.", archetype: "responsibility-carrier" },
+      { text: "I wonder what decisions led to that outcome.", archetype: "strategic-overthinker" },
+      { text: "That's what happens when you stop hustling.", archetype: "relentless-builder" },
+    ],
+  },
+  {
+    id: 5,
     text: "When a competitor raises a large funding round:",
     answers: [
       { text: "We're falling behind. This might kill our chances.", archetype: "signal-amplifier" },
@@ -57,7 +68,7 @@ export const questions: Question[] = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     text: "When you finally hit a major milestone:",
     answers: [
       { text: "I'm already worried about what could go wrong next.", archetype: "signal-amplifier" },

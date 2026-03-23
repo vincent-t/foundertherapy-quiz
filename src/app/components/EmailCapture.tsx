@@ -1,21 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { archetypes, ArchetypeId } from "@/data/archetypes";
 
 interface EmailCaptureProps {
-  archetype: string;
+  archetype: ArchetypeId;
+  secondary?: ArchetypeId;
+  answers: ArchetypeId[];
+  completionId: string | null;
+  onCompletionLogged: (id: string) => void;
   onSubmit: (email: string) => void;
   onSkip: () => void;
 }
 
-export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps) {
+export function EmailCapture({
+  archetype,
+  secondary,
+  answers,
+  completionId,
+  onCompletionLogged,
+  onSubmit,
+  onSkip,
+}: EmailCaptureProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const hasLoggedRef = useRef(false);
 
   // Get archetype name for teaser
-  const archetypeData = archetypes[archetype as ArchetypeId];
+  const archetypeData = archetypes[archetype];
   const archetypeName = archetypeData?.name || "Your Archetype";
+
+  // Log completion on mount (without email)
+  useEffect(() => {
+    if (hasLoggedRef.current || completionId) return;
+    hasLoggedRef.current = true;
+
+    fetch("/api/log-completion", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        answers,
+        primary: archetype,
+        secondary: secondary || undefined,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.completionId) {
+          onCompletionLogged(data.completionId);
+        }
+      })
+      .catch((err) => console.error("Log completion error:", err));
+  }, [answers, archetype, secondary, completionId, onCompletionLogged]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +60,16 @@ export function EmailCapture({ archetype, onSubmit, onSkip }: EmailCaptureProps)
     setIsSubmitting(true);
 
     try {
+      // Update completion with email
+      if (completionId) {
+        await fetch("/api/log-completion", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ completionId, email }),
+        });
+      }
+
+      // Subscribe to Brevo
       await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

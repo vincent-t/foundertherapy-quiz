@@ -1,6 +1,11 @@
 import { ArchetypeId } from "@/data/archetypes";
 
-export function calculateResult(answers: ArchetypeId[]): ArchetypeId {
+export interface QuizResult {
+  primary: ArchetypeId;
+  secondary?: ArchetypeId;
+}
+
+export function calculateResult(answers: ArchetypeId[]): QuizResult {
   // Count occurrences of each archetype
   const counts: Record<ArchetypeId, number> = {
     "signal-amplifier": 0,
@@ -14,22 +19,35 @@ export function calculateResult(answers: ArchetypeId[]): ArchetypeId {
     counts[archetype]++;
   });
 
-  // Find the max count
-  const maxCount = Math.max(...Object.values(counts));
-
-  // Get all archetypes with max count (for tie handling)
-  const topArchetypes = (Object.keys(counts) as ArchetypeId[]).filter(
-    (key) => counts[key] === maxCount
+  // Sort archetypes by count (descending)
+  const sorted = (Object.keys(counts) as ArchetypeId[]).sort(
+    (a, b) => counts[b] - counts[a]
   );
 
-  // If tie, return the one that was selected most recently (last in answers array)
+  const primaryCount = counts[sorted[0]];
+  const secondaryCount = counts[sorted[1]];
+
+  // Handle ties for primary - use recency
+  const topArchetypes = sorted.filter((key) => counts[key] === primaryCount);
+  let primary = topArchetypes[0];
+
   if (topArchetypes.length > 1) {
     for (let i = answers.length - 1; i >= 0; i--) {
       if (topArchetypes.includes(answers[i])) {
-        return answers[i];
+        primary = answers[i];
+        break;
       }
     }
   }
 
-  return topArchetypes[0];
+  // Secondary only if it has >= 2 votes and is different from primary
+  let secondary: ArchetypeId | undefined;
+  if (secondaryCount >= 2 && sorted[1] !== primary) {
+    secondary = sorted[1];
+  } else if (secondaryCount >= 2 && sorted[1] === primary && counts[sorted[2]] >= 2) {
+    // If sorted[1] was the primary due to tie, check sorted[2]
+    secondary = sorted[2];
+  }
+
+  return { primary, secondary };
 }

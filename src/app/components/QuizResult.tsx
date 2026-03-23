@@ -4,6 +4,7 @@ import { Archetype, ArchetypeId } from "@/data/archetypes";
 
 interface QuizResultProps {
   archetype: Archetype;
+  secondaryArchetype?: Archetype;
 }
 
 // Match icons from QuizIntro
@@ -38,7 +39,7 @@ const archetypeIcons: Record<ArchetypeId, React.ReactNode> = {
   ),
 };
 
-export function QuizResult({ archetype }: QuizResultProps) {
+export function QuizResult({ archetype, secondaryArchetype }: QuizResultProps) {
   const shareText = encodeURIComponent(
     `I'm a ${archetype.name} founder. Which founder archetype are you?`
   );
@@ -60,6 +61,11 @@ export function QuizResult({ archetype }: QuizResultProps) {
           <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-normal leading-tight">
             {archetype.name}
           </h1>
+          {secondaryArchetype && (
+            <p className="text-[var(--text-muted)] text-sm mt-2">
+              with traits of {secondaryArchetype.name}
+            </p>
+          )}
         </div>
       </div>
 

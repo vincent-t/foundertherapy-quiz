@@ -7,7 +7,7 @@ import { EmailCapture } from "./components/EmailCapture";
 import { QuizResult } from "./components/QuizResult";
 import { questions } from "@/data/questions";
 import { archetypes, ArchetypeId } from "@/data/archetypes";
-import { calculateResult } from "@/lib/scoring";
+import { calculateResult, QuizResult as QuizResultType } from "@/lib/scoring";
 
 type Screen = "intro" | "question" | "email" | "result";
 
@@ -15,7 +15,8 @@ export default function Home() {
   const [screen, setScreen] = useState<Screen>("intro");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<ArchetypeId[]>([]);
-  const [result, setResult] = useState<ArchetypeId | null>(null);
+  const [result, setResult] = useState<QuizResultType | null>(null);
+  const [completionId, setCompletionId] = useState<string | null>(null);
 
   const handleStart = () => {
     setScreen("question");
@@ -44,6 +45,10 @@ export default function Home() {
     }
   };
 
+  const handleCompletionLogged = (id: string) => {
+    setCompletionId(id);
+  };
+
   const handleEmailSubmit = () => {
     setScreen("result");
   };
@@ -70,14 +75,21 @@ export default function Home() {
 
         {screen === "email" && result && (
           <EmailCapture
-            archetype={result}
+            archetype={result.primary}
+            secondary={result.secondary}
+            answers={answers}
+            completionId={completionId}
+            onCompletionLogged={handleCompletionLogged}
             onSubmit={handleEmailSubmit}
             onSkip={handleSkipEmail}
           />
         )}
 
         {screen === "result" && result && (
-          <QuizResult archetype={archetypes[result]} />
+          <QuizResult
+            archetype={archetypes[result.primary]}
+            secondaryArchetype={result.secondary ? archetypes[result.secondary] : undefined}
+          />
         )}
       </div>
     </main>

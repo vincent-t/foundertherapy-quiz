@@ -1,41 +1,19 @@
 import { NextResponse } from "next/server";
+import { db } from "@/db";
+import { quizCompletions } from "@/db/schema";
+import { count } from "drizzle-orm";
 
-// Cache the count for 5 minutes to avoid hitting Brevo too often
+// Cache the count for 5 minutes
 let cachedCount: number | null = null;
 let cacheTime: number = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-async function getBrevoContactCount(): Promise<number> {
-  const apiKey = process.env.BREVO_API_KEY;
-
-  if (!apiKey) {
-    return 0;
-  }
-
+async function getCompletionCount(): Promise<number> {
   try {
-    // Fetch contacts with SOURCE=founder-quiz attribute
-    const response = await fetch(
-      "https://api.brevo.com/v3/contacts?limit=1&segmentId=0&modifiedSince=2020-01-01",
-      {
-        headers: {
-          accept: "application/json",
-          "api-key": apiKey,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      console.error("Brevo API error:", response.status);
-      return 0;
-    }
-
-    const data = await response.json();
-
-    // The count is in the response - filter by our source
-    // For now, return total contacts (we can refine with segments later)
-    return data.count || 0;
+    const [result] = await db.select({ count: count() }).from(quizCompletions);
+    return result?.count || 0;
   } catch (error) {
-    console.error("Failed to fetch Brevo count:", error);
+    console.error("Failed to fetch completion count:", error);
     return 0;
   }
 }
@@ -49,9 +27,9 @@ export async function GET() {
   }
 
   // Fetch fresh count
-  const count = await getBrevoContactCount();
-  cachedCount = count;
+  const completionCount = await getCompletionCount();
+  cachedCount = completionCount;
   cacheTime = now;
 
-  return NextResponse.json({ count });
+  return NextResponse.json({ count: completionCount });
 }
